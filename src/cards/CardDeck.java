@@ -10,14 +10,9 @@ import java.util.Set;
 
 public class CardDeck {
     private final List<PlayingCard> cards;
-
-    public CardDeck() {
-        cards = new ArrayList<>();
-        for (CardSuit suit : CardSuit.values()) {
-            for (CardRank rank : CardRank.values()) {
-                cards.add(new PlayingCard(rank, suit));
-            }
-        }
+ 
+    public CardDeck(CardDeckType deckType) {
+        cards = deckType.getCards();
     }
 
     public CardDeck(List<PlayingCard> cards) {

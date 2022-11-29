@@ -1,6 +1,7 @@
 package game;
 
 import cards.CardDeck;
+import cards.CardDeckType;
 import cards.PlayingCard;
 
 import java.util.*;
@@ -8,9 +9,6 @@ import java.util.*;
 public class PokerGame {
 
     public static void main(String[] args) {
-        CardDeck deck = new CardDeck();
-        deck.shuffle();
-
         PokerPlayer kenny = PokerPlayer.builder()
                 .name("Kenny")
                 .build();
@@ -24,7 +22,8 @@ public class PokerGame {
                 .name("Alice")
                 .build();
 
-        PokerDealer dealer = new PokerDealer(deck, Set.of(kenny, brenna, david, alice));
+        PokerDealer dealer = new PokerDealer(CardDeckType.STANDARD, Set.of(kenny, brenna, david, alice));
+        dealer.shuffleDeck();
         dealer.dealPlayers(2);
 
         dealer.dealToBoard(3);

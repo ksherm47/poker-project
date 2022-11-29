@@ -1,6 +1,7 @@
 package game;
 
 import cards.CardDeck;
+import cards.CardDeckType;
 import cards.PlayingCard;
 import com.google.common.collect.Sets;
 import evaluator.PokerHand;
@@ -18,14 +19,18 @@ public class PokerDealer {
 
     private final Set<PlayingCard> board;
 
-    public PokerDealer(CardDeck deck, Set<PokerPlayer> players) {
-        this.deck = deck;
+    public PokerDealer(CardDeckType deckType, Set<PokerPlayer> players) {
         this.players = players;
 
+        deck = new CardDeck(deckType);
         board = new HashSet<>();
         playerPokerHands = new HashMap<>();
 
         updateAllPlayerHands();
+    }
+
+    public void shuffleDeck() {
+        deck.shuffle();
     }
 
     public void addPlayer(PokerPlayer player) {
@@ -77,11 +82,12 @@ public class PokerDealer {
             PokerPlayer player = playerHandPair.getKey();
             PokerHand hand = playerHandPair.getValue();
 
-            if (hand.betterThan(bestHand)) {
-                bestHand = hand;
-                bestPlayers.clear();
-                bestPlayers.add(player);
-            } else if (hand.sameAs(bestHand)) {
+            boolean handIsBetter = hand.betterThan(bestHand);
+            if (handIsBetter || hand.sameAs(bestHand)) {
+                if (handIsBetter) {
+                    bestHand = hand;
+                    bestPlayers.clear();
+                }
                 bestPlayers.add(player);
             }
         }
