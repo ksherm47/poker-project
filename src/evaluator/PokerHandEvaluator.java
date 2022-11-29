@@ -10,6 +10,9 @@ import java.util.stream.Collectors;
 
 public class PokerHandEvaluator {
 
+    private static final List<CardRank> WHEEL_STRAIGHT_RANKS =
+            List.of(CardRank.ACE, CardRank.FIVE, CardRank.FOUR, CardRank.THREE, CardRank.TWO);
+
     private PokerHandEvaluator() {}
 
     public static PokerHand evaluatePokerHand(Set<PlayingCard> cards) {
@@ -136,7 +139,7 @@ public class PokerHandEvaluator {
                 int lastRankValue = kickers.get(0).getValue();
                 int firstRankValue = kickers.get(4).getValue();
 
-                boolean isWheelStraight = isWheelStraight(kickers);
+                boolean isWheelStraight = kickers.equals(WHEEL_STRAIGHT_RANKS);
                 boolean isStraight = lastRankValue - firstRankValue == 4 || isWheelStraight;
                 boolean isFlush = cards.stream().map(PlayingCard::suit).collect(Collectors.toSet()).size() == 1;
 
@@ -175,10 +178,5 @@ public class PokerHandEvaluator {
         entryList.sort((entry1, entry2) -> entry2.getKey().getValue() - entry1.getKey().getValue());
         entryList.sort((entry1, entry2) -> entry2.getValue() - entry1.getValue());
         return entryList;
-    }
-
-    private static boolean isWheelStraight(List<CardRank> cardRanks) {
-        List<CardRank> wheelStraight = List.of(CardRank.ACE, CardRank.FIVE, CardRank.FOUR, CardRank.THREE, CardRank.TWO);
-        return cardRanks.equals(wheelStraight);
     }
 }
