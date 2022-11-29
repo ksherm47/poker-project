@@ -1,10 +1,10 @@
 package exceptions;
 
-public class EmptyDeckException extends RuntimeException {
+public class PokerDealerException extends RuntimeException {
 
     private final String message;
 
-    public EmptyDeckException(String message) {
+    public PokerDealerException(String message) {
         this.message = message;
     }
 

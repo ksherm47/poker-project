@@ -1,18 +1,20 @@
 package cards;
 
-import exceptions.EmptyDeckException;
+import com.google.common.collect.Iterables;
+import exceptions.DeckSizeException;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 public class CardDeck {
     private final List<PlayingCard> cards;
 
-    public CardDeck () {
+    public CardDeck() {
         cards = new ArrayList<>();
-        for (CardRank rank : CardRank.values()) {
-            for (CardSuit suit : CardSuit.values()) {
+        for (CardSuit suit : CardSuit.values()) {
+            for (CardRank rank : CardRank.values()) {
                 cards.add(new PlayingCard(rank, suit));
             }
         }
@@ -26,11 +28,20 @@ public class CardDeck {
         Collections.shuffle(cards);
     }
 
-    public PlayingCard draw() throws EmptyDeckException {
-        if (cards.isEmpty()) {
-            throw new EmptyDeckException("Cannot draw from empty deck");
+    public PlayingCard draw() {
+        return Iterables.getOnlyElement(draw(1));
+    }
+
+    public Set<PlayingCard> draw(int numberOfCards) {
+        if (cards.size() < numberOfCards) {
+            throw new DeckSizeException("Cannot draw " + numberOfCards + " cards, deck size = " + cards.size());
         }
-        return cards.remove(0);
+
+        PlayingCard[] drawnCards = new PlayingCard[numberOfCards];
+        for (int i = 0; i < numberOfCards; i++) {
+            drawnCards[i] = cards.remove(0);
+        }
+        return Set.of(drawnCards);
     }
 
     public boolean isEmpty() {

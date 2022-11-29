@@ -63,6 +63,14 @@ public class PokerHand implements Comparable<PokerHand> {
         return pokerHandString;
     }
 
+    public boolean betterThan(PokerHand otherHand) {
+        return otherHand == null || compareTo(otherHand) > 0;
+    }
+
+    public boolean sameAs(PokerHand otherHand) {
+        return otherHand != null && compareTo(otherHand) == 0;
+    }
+
     private String getPlural(CardRank rank) {
         return rank.getRank() + (rank == CardRank.SIX ? "es" : "s");
     }

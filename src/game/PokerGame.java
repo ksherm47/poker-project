@@ -1,71 +1,51 @@
 package game;
 
 import cards.CardDeck;
-import cards.CardRank;
-import cards.CardSuit;
 import cards.PlayingCard;
-import com.google.common.collect.Sets;
-import evaluator.PokerHand;
-import evaluator.PokerHandEvaluator;
-import evaluator.PokerHandTier;
-import exceptions.EmptyDeckException;
-import exceptions.PokerHandEvaluationException;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class PokerGame {
 
     public static void main(String[] args) {
+        CardDeck deck = new CardDeck();
+        deck.shuffle();
 
-        //for (int i = 0; i < 10000; i++) {
-            CardDeck deck = new CardDeck();
-            //Set<PlayingCard> handCards = new HashSet<>();
-            deck.shuffle();
+        PokerPlayer kenny = PokerPlayer.builder()
+                .name("Kenny")
+                .build();
+        PokerPlayer brenna = PokerPlayer.builder()
+                .name("Brenna")
+                .build();
+        PokerPlayer david = PokerPlayer.builder()
+                .name("David")
+                .build();
+        PokerPlayer alice = PokerPlayer.builder()
+                .name("Alice")
+                .build();
 
-            Set<PlayingCard> board = new HashSet<>();
-            Set<PlayingCard> hand1 = new HashSet<>();
-            Set<PlayingCard> hand2 = new HashSet<>();
-            Set<PlayingCard> hand3 = new HashSet<>();
+        PokerDealer dealer = new PokerDealer(deck, Set.of(kenny, brenna, david, alice));
+        dealer.dealPlayers(2);
 
-            hand1.add(deck.draw());
-            hand2.add(deck.draw());
-            hand3.add(deck.draw());
-            hand1.add(deck.draw());
-            hand2.add(deck.draw());
-            hand3.add(deck.draw());
+        dealer.dealToBoard(3);
+        dealer.burnCard();
+        dealer.dealToBoard(1);
+        dealer.burnCard();
+        dealer.dealToBoard(1);
 
-            board.add(deck.draw());
-            board.add(deck.draw());
-            board.add(deck.draw());
-            deck.draw();
-            board.add(deck.draw());
-            deck.draw();
-            board.add(deck.draw());
+        Set<PlayingCard> board = dealer.getBoardCards();
 
-            System.out.println("Board: " + board);
-            System.out.println("Hand 1: " + hand1);
-            System.out.println("Hand 2: " + hand2);
-            System.out.println("Hand 3: " + hand3);
-            System.out.println();
+        System.out.println();
+        System.out.println("Board: " + board);
+        System.out.println();
+        System.out.println("Kenny: " + kenny.getHandCards() + " (" + dealer.getPlayerPokerHand(kenny) + ")");
+        System.out.println("Brenna: " + brenna.getHandCards() + " (" + dealer.getPlayerPokerHand(brenna) + ")");
+        System.out.println("David: " + david.getHandCards() + " (" + dealer.getPlayerPokerHand(david) + ")");
+        System.out.println("Alice: " + alice.getHandCards() + " (" + dealer.getPlayerPokerHand(alice) + ")");
+        System.out.println();
 
-            PokerHand pokerHand1 = PokerHandEvaluator.evaluatePokerHand(Sets.union(board, hand1));
-            PokerHand pokerHand2 = PokerHandEvaluator.evaluatePokerHand(Sets.union(board, hand2));
-            PokerHand pokerHand3 = PokerHandEvaluator.evaluatePokerHand(Sets.union(board, hand3));
-
-            PokerHand bestHand = Collections.max(List.of(pokerHand1, pokerHand2, pokerHand3));
-
-            System.out.println("Best Hand: " + bestHand + " " + bestHand.getCards());
-
-//            PokerHand pokerHand = PokerHandEvaluator.evaluatePokerHand(handCards);
-//            if (pokerHand.getTier().betterThan(PokerHandTier.FULL_HOUSE)) {
-//                System.out.println("Cards dealt: " + handCards);
-//                System.out.println("Hand Cards: " + pokerHand.getCards());
-//                System.out.println("Hand: " + pokerHand);
-//                System.out.println();
-//            }
-        //}
+        for (PokerPlayer player : dealer.getBestPlayers()) {
+            System.out.println("Best Hand: " + player.getName() + " " + dealer.getPlayerPokerHand(player).getCards());
+        }
     }
 }

@@ -12,16 +12,6 @@ public class PokerHandEvaluator {
 
     private PokerHandEvaluator() {}
 
-    public static boolean pokerHandIsBetter(PokerHand pokerHand1, PokerHand pokerHand2) {
-        if (pokerHand2 == null) {
-            return true;
-        }
-        if (pokerHand1 == null) {
-            return false;
-        }
-        return pokerHand1.compareTo(pokerHand2) > 0;
-    }
-
     public static PokerHand evaluatePokerHand(Set<PlayingCard> cards) {
         if (cards == null || cards.isEmpty()) {
             throw new PokerHandEvaluationException("Card set must not be empty or null");
@@ -44,7 +34,7 @@ public class PokerHandEvaluator {
                 PokerHand bestHand = null;
                 for (Set<PlayingCard> fiveCardHand : Sets.combinations(cards, 5)) {
                     PokerHand pokerHand = evaluateFiveCardHand(fiveCardHand);
-                    if (pokerHandIsBetter(pokerHand, bestHand)) {
+                    if (pokerHand.betterThan(bestHand)) {
                         bestHand = pokerHand;
                     }
                 }
