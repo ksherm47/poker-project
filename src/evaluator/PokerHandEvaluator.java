@@ -17,29 +17,19 @@ public class PokerHandEvaluator {
             throw new PokerHandEvaluationException("Card set must not be empty or null");
         }
 
-        switch (cards.size()) {
-            case 1:
-                return PokerHand.builder()
-                        .cards(cards)
-                        .tier(PokerHandTier.HIGH_CARD)
-                        .kickers(cards.stream().map(PlayingCard::rank).toList())
-                        .build();
-            case 2:
-                return evaluateTwoCardHand(cards);
-            case 3:
-                return evaluateThreeCardHand(cards);
-            case 4:
-                return evaluateFourCardHand(cards);
-            default:
-                PokerHand bestHand = null;
-                for (Set<PlayingCard> fiveCardHand : Sets.combinations(cards, 5)) {
-                    PokerHand pokerHand = evaluateFiveCardHand(fiveCardHand);
-                    if (pokerHand.betterThan(bestHand)) {
-                        bestHand = pokerHand;
-                    }
-                }
-                return bestHand;
-        }
+        return switch (cards.size()) {
+            case 1 -> PokerHand.builder()
+                    .cards(cards)
+                    .tier(PokerHandTier.HIGH_CARD)
+                    .kickers(cards.stream().map(PlayingCard::rank).toList())
+                    .build();
+            case 2 -> evaluateTwoCardHand(cards);
+            case 3 -> evaluateThreeCardHand(cards);
+            case 4 -> evaluateFourCardHand(cards);
+            default -> Collections.max(Sets.combinations(cards, 5).stream()
+                    .map(PokerHandEvaluator::evaluateFiveCardHand)
+                    .collect(Collectors.toSet()));
+        };
     }
 
     private static PokerHand evaluateTwoCardHand(Set<PlayingCard> cards) {

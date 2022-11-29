@@ -52,15 +52,19 @@ public class PokerHand implements Comparable<PokerHand> {
             return tier.getTier();
         }
 
-        String pokerHandString = tier.getTier() + ", ";
+        StringBuilder pokerHandString = new StringBuilder(tier.getTier()).append(", ");
         switch (tier) {
-            case FULL_HOUSE -> pokerHandString += getPlural(kickers.get(0)) + " over " + getPlural(kickers.get(1));
-            case TWO_PAIR -> pokerHandString += getPlural(kickers.get(0)) + " and " + getPlural(kickers.get(1));
-            case THREE_OF_A_KIND, FOUR_OF_A_KIND, PAIR -> pokerHandString += getPlural(kickers.get(0));
-            default -> pokerHandString += kickers.get(0).getRank() + " High";
+            case FULL_HOUSE -> pokerHandString.append(plural(kickers.get(0)))
+                    .append(" over ")
+                    .append(plural(kickers.get(1)));
+            case TWO_PAIR -> pokerHandString.append(plural(kickers.get(0)))
+                    .append(" and ")
+                    .append(plural(kickers.get(1)));
+            case THREE_OF_A_KIND, FOUR_OF_A_KIND, PAIR -> pokerHandString.append(plural(kickers.get(0)));
+            default -> pokerHandString.append(kickers.get(0).getRank()).append(" High");
         }
 
-        return pokerHandString;
+        return pokerHandString.toString();
     }
 
     public boolean betterThan(PokerHand otherHand) {
@@ -71,7 +75,7 @@ public class PokerHand implements Comparable<PokerHand> {
         return otherHand != null && compareTo(otherHand) == 0;
     }
 
-    private String getPlural(CardRank rank) {
+    private String plural(CardRank rank) {
         return rank.getRank() + (rank == CardRank.SIX ? "es" : "s");
     }
 }
