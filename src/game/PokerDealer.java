@@ -6,7 +6,7 @@ import cards.PlayingCard;
 import com.google.common.collect.Sets;
 import evaluator.PokerHand;
 import evaluator.PokerHandEvaluator;
-import exceptions.PokerDealerException;
+import rules.PokerHandRules;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -15,8 +15,6 @@ public class PokerDealer {
 
     private final CardDeck deck;
     private final Set<PokerPlayer> players;
-    private final Map<PokerPlayer, PokerHand> playerPokerHands;
-
     private final Set<PlayingCard> board;
 
     public PokerDealer(CardDeckType deckType, Set<PokerPlayer> players) {
@@ -24,9 +22,6 @@ public class PokerDealer {
 
         deck = new CardDeck(deckType);
         board = new HashSet<>();
-        playerPokerHands = new HashMap<>();
-
-        updateAllPlayerHands();
     }
 
     public void shuffleDeck() {
@@ -35,12 +30,10 @@ public class PokerDealer {
 
     public void addPlayer(PokerPlayer player) {
         players.add(player);
-        updatePlayerHand(player);
     }
 
     public void removePlayer(PokerPlayer player) {
         players.remove(player);
-        playerPokerHands.remove(player);
     }
 
     public void dealPlayers(int numberOfCards) {
@@ -51,12 +44,10 @@ public class PokerDealer {
                 }
             }
         );
-        updateAllPlayerHands();
     }
 
     public void dealToBoard(int numberOfCards) {
         board.addAll(deck.draw(numberOfCards));
-        updateAllPlayerHands();
     }
 
     public void burnCard() {
@@ -67,48 +58,24 @@ public class PokerDealer {
         return new HashSet<>(board);
     }
 
-    public PokerHand getPlayerPokerHand(PokerPlayer player) {
-        if (!players.contains(player)) {
-            throw new PokerDealerException("Player " + player.getName() + " not added to dealer.");
-        }
-
-        return playerPokerHands.get(player);
-    }
-
-    public Set<PokerPlayer> getBestPlayers() {
+    public Set<PlayerHandInfo> getWinningPlayers(PokerHandRules rules) {
         PokerHand bestHand = null;
-        Set<PokerPlayer> bestPlayers = new HashSet<>();
-        for (Map.Entry<PokerPlayer, PokerHand> playerHandPair : playerPokerHands.entrySet()) {
-            PokerPlayer player = playerHandPair.getKey();
-            PokerHand hand = playerHandPair.getValue();
+        Set<PlayerHandInfo> bestPlayersInfo = new HashSet<>();
 
-            boolean handIsBetter = hand.betterThan(bestHand);
-            if (handIsBetter || hand.sameAs(bestHand)) {
+        for (PokerPlayer player : players) {
+            PokerHand hand = PokerHandEvaluator.evaluatePokerHand(Sets.union(board, player.getHandCards()));
+            boolean handIsBetter = rules.handIsBetter(hand, bestHand);
+            if (handIsBetter || rules.handIsSame(hand, bestHand)) {
                 if (handIsBetter) {
                     bestHand = hand;
-                    bestPlayers.clear();
+                    bestPlayersInfo.clear();
                 }
-                bestPlayers.add(player);
+                bestPlayersInfo.add(PlayerHandInfo.builder()
+                        .player(player)
+                        .hand(hand)
+                        .build());
             }
         }
-        return bestPlayers;
-    }
-
-    private void updatePlayerHand(PokerPlayer player) {
-        if (!players.contains(player)) {
-            throw new PokerDealerException("Player " + player.getName() + " not added to dealer.");
-        }
-
-        PokerHand pokerHand = null;
-        if (!player.getHandCards().isEmpty()) {
-            pokerHand = PokerHandEvaluator.evaluatePokerHand(Sets.union(player.getHandCards(), board));
-        }
-        playerPokerHands.put(player, pokerHand);
-    }
-
-    private void updateAllPlayerHands() {
-        for (PokerPlayer player : players) {
-            updatePlayerHand(player);
-        }
+        return bestPlayersInfo;
     }
 }

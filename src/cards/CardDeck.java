@@ -10,7 +10,7 @@ import java.util.Set;
 
 public class CardDeck {
     private final List<PlayingCard> cards;
- 
+
     public CardDeck(CardDeckType deckType) {
         cards = deckType.getCards();
     }

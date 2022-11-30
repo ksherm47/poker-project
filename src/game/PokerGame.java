@@ -1,8 +1,10 @@
 package game;
 
-import cards.CardDeck;
 import cards.CardDeckType;
 import cards.PlayingCard;
+import evaluator.PokerHand;
+import rules.PokerHandRules;
+import rules.StandardPokerHandRules;
 
 import java.util.*;
 
@@ -22,7 +24,10 @@ public class PokerGame {
                 .name("Alice")
                 .build();
 
-        PokerDealer dealer = new PokerDealer(CardDeckType.STANDARD, Set.of(kenny, brenna, david, alice));
+        Set<PokerPlayer> players = Set.of(kenny, brenna, david, alice);
+        PokerHandRules rules = new StandardPokerHandRules();
+        PokerDealer dealer = new PokerDealer(CardDeckType.STANDARD, players);
+
         dealer.shuffleDeck();
         dealer.dealPlayers(2);
 
@@ -37,14 +42,17 @@ public class PokerGame {
         System.out.println();
         System.out.println("Board: " + board);
         System.out.println();
-        System.out.println("Kenny: " + kenny.getHandCards() + " (" + dealer.getPlayerPokerHand(kenny) + ")");
-        System.out.println("Brenna: " + brenna.getHandCards() + " (" + dealer.getPlayerPokerHand(brenna) + ")");
-        System.out.println("David: " + david.getHandCards() + " (" + dealer.getPlayerPokerHand(david) + ")");
-        System.out.println("Alice: " + alice.getHandCards() + " (" + dealer.getPlayerPokerHand(alice) + ")");
+        System.out.println("Kenny: " + kenny.getHandCards());
+        System.out.println("Brenna: " + brenna.getHandCards());
+        System.out.println("David: " + david.getHandCards());
+        System.out.println("Alice: " + alice.getHandCards());
         System.out.println();
 
-        for (PokerPlayer player : dealer.getBestPlayers()) {
-            System.out.println("Best Hand: " + player.getName() + " " + dealer.getPlayerPokerHand(player).getCards());
+        for (PlayerHandInfo playerHandInfo : dealer.getWinningPlayers(rules)) {
+            PokerPlayer player = playerHandInfo.getPlayer();
+            PokerHand hand = playerHandInfo.getHand();
+            System.out.println("Best Player: " + player.getName());
+            System.out.println("Hand: " + hand + " " + hand.getCards());
         }
     }
 }
