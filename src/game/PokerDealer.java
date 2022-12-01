@@ -6,7 +6,8 @@ import cards.PlayingCard;
 import rules.handevaluation.PokerHand;
 import rules.PokerHandRuleSet;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 public class PokerDealer {

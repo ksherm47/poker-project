@@ -1,13 +1,13 @@
 package rules.handevaluation;
 
-import cards.CardRank;
 import cards.PlayingCard;
 import com.google.common.collect.Sets;
 import rules.handranking.PokerHandRankingRuleSet;
 import rules.handranking.handtier.PokerHandTier;
 import exceptions.PokerHandEvaluationException;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class StandardPokerHandEvaluator extends PokerHandEvaluatorBase implements PokerHandEvaluator {
