@@ -4,14 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum CardSuit {
-    CLUBS("Clubs"),
-    SPADES("Spades"),
-    HEARTS("Hearts"),
-    DIAMONDS("Diamonds");
+    CLUBS(CardFormatting.CLUB),
+    SPADES(CardFormatting.SPADE),
+    HEARTS(CardFormatting.HEART),
+    DIAMONDS(CardFormatting.DIAMOND);
 
-    private final String suit;
+    private final String symbol;
 
-    CardSuit(String suit) {
-        this.suit = suit;
+    CardSuit(String symbol) {
+        this.symbol = symbol;
     }
 }
