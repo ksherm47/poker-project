@@ -1,41 +1,19 @@
-package evaluator;
+package rules.handevaluation;
 
 import cards.CardRank;
 import cards.PlayingCard;
-import com.google.common.collect.Sets;
 import exceptions.PokerHandEvaluationException;
+import rules.handranking.handtier.PokerHandTier;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PokerHandEvaluator {
+public class PokerHandEvaluatorBase {
 
     private static final List<CardRank> WHEEL_STRAIGHT_RANKS =
             List.of(CardRank.ACE, CardRank.FIVE, CardRank.FOUR, CardRank.THREE, CardRank.TWO);
 
-    private PokerHandEvaluator() {}
-
-    public static PokerHand evaluatePokerHand(Set<PlayingCard> cards) {
-        if (cards == null || cards.isEmpty()) {
-            throw new PokerHandEvaluationException("Card set must not be empty or null");
-        }
-
-        return switch (cards.size()) {
-            case 1 -> PokerHand.builder()
-                    .cards(cards)
-                    .tier(PokerHandTier.HIGH_CARD)
-                    .kickers(cards.stream().map(PlayingCard::rank).toList())
-                    .build();
-            case 2 -> evaluateTwoCardHand(cards);
-            case 3 -> evaluateThreeCardHand(cards);
-            case 4 -> evaluateFourCardHand(cards);
-            default -> Collections.max(Sets.combinations(cards, 5).stream()
-                    .map(PokerHandEvaluator::evaluateFiveCardHand)
-                    .collect(Collectors.toSet()));
-        };
-    }
-
-    private static PokerHand evaluateTwoCardHand(Set<PlayingCard> cards) {
+    protected PokerHand evaluateTwoCardHand(Set<PlayingCard> cards) {
         if (cards.size() != 2) {
             throw new PokerHandEvaluationException("Number of cards in set to evaluate must be 2.");
         }
@@ -51,7 +29,7 @@ public class PokerHandEvaluator {
                 .build();
     }
 
-    private static PokerHand evaluateThreeCardHand(Set<PlayingCard> cards) {
+    protected PokerHand evaluateThreeCardHand(Set<PlayingCard> cards) {
         if (cards.size() != 3) {
             throw new PokerHandEvaluationException("Number of cards in set to evaluate must be 3.");
         }
@@ -73,7 +51,7 @@ public class PokerHandEvaluator {
                 .build();
     }
 
-    private static PokerHand evaluateFourCardHand(Set<PlayingCard> cards) {
+    protected PokerHand evaluateFourCardHand(Set<PlayingCard> cards) {
         if (cards.size() != 4) {
             throw new PokerHandEvaluationException("Number of cards in set to evaluate must be 4.");
         }
@@ -108,7 +86,7 @@ public class PokerHandEvaluator {
                 .build();
     }
 
-    private static PokerHand evaluateFiveCardHand(Set<PlayingCard> cards) {
+    protected PokerHand evaluateFiveCardHand(Set<PlayingCard> cards) {
         if (cards.size() != 5) {
             throw new PokerHandEvaluationException("Number of cards in set to evaluate must be 5.");
         }
@@ -165,7 +143,7 @@ public class PokerHandEvaluator {
                 .build();
     }
 
-    private static List<Map.Entry<CardRank, Integer>> sortHand(Set<PlayingCard> cards) {
+    private List<Map.Entry<CardRank, Integer>> sortHand(Set<PlayingCard> cards) {
         Map<CardRank, Integer> cardRankCounts = new HashMap<>();
 
         for (PlayingCard card : cards) {

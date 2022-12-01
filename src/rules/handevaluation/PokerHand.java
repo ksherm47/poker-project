@@ -1,8 +1,8 @@
-package evaluator;
+package rules.handevaluation;
 
 import cards.CardRank;
 import cards.PlayingCard;
-import exceptions.PokerHandComparisonException;
+import rules.handranking.handtier.PokerHandTier;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,39 +12,11 @@ import java.util.Set;
 
 @Getter
 @Builder(access = AccessLevel.PACKAGE)
-public class PokerHand implements Comparable<PokerHand> {
+public class PokerHand {
 
     private final PokerHandTier tier;
     private final Set<PlayingCard> cards;
     private final List<CardRank> kickers;
-
-    @Override
-    public int compareTo(PokerHand other) {
-        if (tier.betterThan(other.tier)) {
-            return 1;
-        }
-
-        if (other.tier.betterThan(tier)) {
-            return -1;
-        }
-
-        if (kickers.size() != other.kickers.size()) {
-            throw new PokerHandComparisonException("Poker hands of same tier must contain same number of kickers.");
-        }
-
-        int i = 0;
-        for (CardRank rank : kickers) {
-            if (rank.betterThan(other.kickers.get(i))) {
-                return 1;
-            }
-            if (other.kickers.get(i).betterThan(rank)) {
-                return -1;
-            }
-            i++;
-        }
-
-        return 0;
-    }
 
     @Override
     public String toString() {
@@ -65,14 +37,6 @@ public class PokerHand implements Comparable<PokerHand> {
         }
 
         return pokerHandString.toString();
-    }
-
-    public boolean betterThan(PokerHand otherHand) {
-        return otherHand == null || compareTo(otherHand) > 0;
-    }
-
-    public boolean sameAs(PokerHand otherHand) {
-        return otherHand != null && compareTo(otherHand) == 0;
     }
 
     private String plural(CardRank rank) {

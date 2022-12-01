@@ -25,8 +25,4 @@ public enum CardRank {
         this.value = value;
         this.rank = rank;
     }
-
-    public boolean betterThan(CardRank otherCardRank) {
-        return this.value > otherCardRank.value;
-    }
 }

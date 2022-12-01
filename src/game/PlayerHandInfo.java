@@ -1,6 +1,6 @@
 package game;
 
-import evaluator.PokerHand;
+import rules.handevaluation.PokerHand;
 import lombok.Builder;
 import lombok.Getter;
 

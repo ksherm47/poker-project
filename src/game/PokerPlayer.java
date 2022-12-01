@@ -1,8 +1,6 @@
 package game;
 
 import cards.PlayingCard;
-import evaluator.PokerHand;
-import evaluator.PokerHandEvaluator;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

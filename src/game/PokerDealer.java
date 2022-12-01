@@ -3,10 +3,8 @@ package game;
 import cards.CardDeck;
 import cards.CardDeckType;
 import cards.PlayingCard;
-import com.google.common.collect.Sets;
-import evaluator.PokerHand;
-import evaluator.PokerHandEvaluator;
-import rules.PokerHandRules;
+import rules.handevaluation.PokerHand;
+import rules.PokerHandRuleSet;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -58,15 +56,16 @@ public class PokerDealer {
         return new HashSet<>(board);
     }
 
-    public Set<PlayerHandInfo> getWinningPlayers(PokerHandRules rules) {
+    public Set<PlayerHandInfo> getWinningPlayers(PokerHandRuleSet handRuleSet) {
         PokerHand bestHand = null;
         Set<PlayerHandInfo> bestPlayersInfo = new HashSet<>();
 
         for (PokerPlayer player : players) {
-            PokerHand hand = PokerHandEvaluator.evaluatePokerHand(Sets.union(board, player.getHandCards()));
-            boolean handIsBetter = rules.handIsBetter(hand, bestHand);
-            if (handIsBetter || rules.handIsSame(hand, bestHand)) {
-                if (handIsBetter) {
+            PokerHand hand = handRuleSet.getHandEvaluator().evaluatePokerHand(board, player.getHandCards());
+            int comparison = handRuleSet.getHandRankingRuleSet().compare(hand, bestHand);
+
+            if (comparison >= 0) {
+                if (comparison > 0) {
                     bestHand = hand;
                     bestPlayersInfo.clear();
                 }
@@ -77,5 +76,9 @@ public class PokerDealer {
             }
         }
         return bestPlayersInfo;
+    }
+
+    public PokerHand getPlayerPokerHand(PokerPlayer player, PokerHandRuleSet handRuleSet) {
+        return handRuleSet.getHandEvaluator().evaluatePokerHand(board, player.getHandCards());
     }
 }

@@ -13,11 +13,12 @@ public enum CardDeckType {
             case SHORT:
                 for (CardSuit suit : CardSuit.values()) {
                     for (CardRank rank : CardRank.values()) {
-                        if (rank.betterThan(CardRank.FIVE)) {
+                        if (rank.getValue() > CardRank.FIVE.getValue()) {
                             cards.add(new PlayingCard(rank, suit));
                         }
                     }
                 }
+                break;
             case STANDARD:
             default:
                 for (CardSuit suit : CardSuit.values()) {
