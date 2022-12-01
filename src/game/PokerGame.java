@@ -28,9 +28,10 @@ public class PokerGame {
 
         Set<PokerPlayer> players = Set.of(kenny, brenna, david, alice, sam);
         PokerDealer dealer = new PokerDealer(CardDeckType.STANDARD, players);
+        PokerHandRuleSet handRuleSet = PokerHandRuleSet.LOWBALL;
 
         dealer.shuffleDeck();
-        dealer.dealPlayers(4);
+        dealer.dealPlayers(2);
 
         dealer.dealToBoard(3);
         dealer.burnCard();
@@ -43,19 +44,14 @@ public class PokerGame {
         System.out.println();
         System.out.println("Board: " + board);
         System.out.println();
-        System.out.println("Kenny: " + kenny.getHandCards() +
-                " (" + dealer.getPlayerPokerHand(kenny, PokerHandRuleSet.OMAHA) + ")");
-        System.out.println("Brenna: " + brenna.getHandCards() +
-                " (" + dealer.getPlayerPokerHand(brenna, PokerHandRuleSet.OMAHA) + ")");
-        System.out.println("David: " + david.getHandCards() +
-                " (" + dealer.getPlayerPokerHand(david, PokerHandRuleSet.OMAHA) + ")");
-        System.out.println("Alice: " + alice.getHandCards() +
-                " (" + dealer.getPlayerPokerHand(alice, PokerHandRuleSet.OMAHA) + ")");
-        System.out.println("Sam: " + sam.getHandCards() +
-                " (" + dealer.getPlayerPokerHand(sam, PokerHandRuleSet.OMAHA) + ")");
+        System.out.println("Kenny: " + kenny.getHandCards() + " (" + dealer.getPlayerPokerHand(kenny, handRuleSet) + ")");
+        System.out.println("Brenna: " + brenna.getHandCards() + " (" + dealer.getPlayerPokerHand(brenna, handRuleSet) + ")");
+        System.out.println("David: " + david.getHandCards() + " (" + dealer.getPlayerPokerHand(david, handRuleSet) + ")");
+        System.out.println("Alice: " + alice.getHandCards() + " (" + dealer.getPlayerPokerHand(alice, handRuleSet) + ")");
+        System.out.println("Sam: " + sam.getHandCards() + " (" + dealer.getPlayerPokerHand(sam, handRuleSet) + ")");
         System.out.println();
 
-        for (PlayerHandInfo playerHandInfo : dealer.getWinningPlayers(PokerHandRuleSet.OMAHA)) {
+        for (PlayerHandInfo playerHandInfo : dealer.getWinningPlayers(handRuleSet)) {
             PokerPlayer player = playerHandInfo.getPlayer();
             PokerHand hand = playerHandInfo.getHand();
             System.out.println("Best Player: " + player.getName());
