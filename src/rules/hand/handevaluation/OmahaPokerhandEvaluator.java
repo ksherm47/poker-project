@@ -1,8 +1,8 @@
-package rules.handevaluation;
+package rules.hand.handevaluation;
 
 import cards.PlayingCard;
 import com.google.common.collect.Sets;
-import rules.handranking.PokerHandRankingRuleSet;
+import rules.hand.handranking.PokerHandRankingRuleSet;
 
 import java.util.Collections;
 import java.util.HashSet;

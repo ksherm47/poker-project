@@ -1,10 +1,10 @@
-package rules;
+package rules.hand;
 
 import lombok.Getter;
-import rules.handevaluation.OmahaPokerhandEvaluator;
-import rules.handevaluation.PokerHandEvaluator;
-import rules.handevaluation.StandardPokerHandEvaluator;
-import rules.handranking.PokerHandRankingRuleSet;
+import rules.hand.handevaluation.OmahaPokerhandEvaluator;
+import rules.hand.handevaluation.PokerHandEvaluator;
+import rules.hand.handevaluation.StandardPokerHandEvaluator;
+import rules.hand.handranking.PokerHandRankingRuleSet;
 
 @Getter
 public enum PokerHandRuleSet {

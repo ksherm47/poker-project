@@ -1,9 +1,9 @@
-package rules.handevaluation;
+package rules.hand.handevaluation;
 
 import cards.CardRank;
 import cards.PlayingCard;
 import exceptions.PokerHandEvaluationException;
-import rules.handranking.handtier.PokerHandTier;
+import rules.hand.handranking.handtier.PokerHandTier;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,25 +63,13 @@ public class PokerHandEvaluatorBase {
         List<Map.Entry<CardRank, Integer>> cardRankCounts = sortHand(cards);
         List<CardRank> kickers = cardRankCounts.stream().map(Map.Entry::getKey).toList();
 
-        PokerHandTier pokerHandTier = null;
-        switch (cardRankCounts.size()) {
-            case 1:
-                pokerHandTier = PokerHandTier.FOUR_OF_A_KIND;
-                break;
-            case 2:
-                if (cardRankCounts.get(0).getValue() == 2) {
-                    pokerHandTier = PokerHandTier.TWO_PAIR;
-                } else {
-                    pokerHandTier = PokerHandTier.THREE_OF_A_KIND;
-                }
-                break;
-            case 3:
-                pokerHandTier = PokerHandTier.PAIR;
-                break;
-            case 4:
-                pokerHandTier = PokerHandTier.HIGH_CARD;
-                break;
-        }
+        PokerHandTier pokerHandTier = switch (cardRankCounts.size()) {
+            case 1 -> PokerHandTier.FOUR_OF_A_KIND;
+            case 2 -> cardRankCounts.get(0).getValue() == 2 ? PokerHandTier.TWO_PAIR : PokerHandTier.THREE_OF_A_KIND;
+            case 3 -> PokerHandTier.PAIR;
+            case 4 -> PokerHandTier.HIGH_CARD;
+            default -> null;
+        };
 
         return PokerHand.builder()
                 .cards(cards)
@@ -100,31 +88,17 @@ public class PokerHandEvaluatorBase {
 
         PokerHandTier pokerHandTier = null;
         switch (cardRankCounts.size()) {
-            case 2:
-                if (cardRankCounts.get(0).getValue() == 4) {
-                    pokerHandTier = PokerHandTier.FOUR_OF_A_KIND;
-                } else {
-                    pokerHandTier = PokerHandTier.FULL_HOUSE;
-                }
-                break;
-            case 3:
-                if (cardRankCounts.get(0).getValue() == 3) {
-                    pokerHandTier = PokerHandTier.THREE_OF_A_KIND;
-                } else {
-                    pokerHandTier = PokerHandTier.TWO_PAIR;
-                }
-                break;
-            case 4:
-                pokerHandTier = PokerHandTier.PAIR;
-                break;
-            case 5:
+            case 2 -> pokerHandTier = cardRankCounts.get(0).getValue() == 4 ?
+                    PokerHandTier.FOUR_OF_A_KIND : PokerHandTier.FULL_HOUSE;
+            case 3 -> pokerHandTier = cardRankCounts.get(0).getValue() == 3 ?
+                    PokerHandTier.THREE_OF_A_KIND : PokerHandTier.TWO_PAIR;
+            case 4 -> pokerHandTier = PokerHandTier.PAIR;
+            case 5 -> {
                 int lastRankValue = kickers.get(0).getValue();
                 int firstRankValue = kickers.get(4).getValue();
-
                 boolean isWheelStraight = kickers.equals(WHEEL_STRAIGHT_RANKS);
                 boolean isStraight = lastRankValue - firstRankValue == 4 || isWheelStraight;
                 boolean isFlush = cards.stream().map(PlayingCard::suit).collect(Collectors.toSet()).size() == 1;
-
                 if (isStraight) {
                     kickers = List.of(isWheelStraight ? kickers.get(1) : kickers.get(0));
                     if (isFlush) {
@@ -138,6 +112,7 @@ public class PokerHandEvaluatorBase {
                 } else {
                     pokerHandTier = PokerHandTier.HIGH_CARD;
                 }
+            }
         }
 
         return PokerHand.builder()

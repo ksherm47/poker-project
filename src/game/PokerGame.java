@@ -1,61 +1,19 @@
 package game;
 
+import cards.CardDeck;
 import cards.CardDeckType;
-import cards.PlayingCard;
-import rules.PokerHandRuleSet;
-import rules.handevaluation.PokerHand;
-
-import java.util.Set;
+import rules.game.PokerGameFlow;
+import rules.hand.PokerHandRuleSet;
 
 public class PokerGame {
 
-    public static void main(String[] args) {
-        PokerPlayer kenny = PokerPlayer.builder()
-                .name("Kenny")
-                .build();
-        PokerPlayer brenna = PokerPlayer.builder()
-                .name("Brenna")
-                .build();
-        PokerPlayer david = PokerPlayer.builder()
-                .name("David")
-                .build();
-        PokerPlayer alice = PokerPlayer.builder()
-                .name("Alice")
-                .build();
-        PokerPlayer sam = PokerPlayer.builder()
-                .name("Sam")
-                .build();
+    private final PokerGameFlow pokerGameFlow;
+    private final PokerHandRuleSet handRuleSet;
+    private final CardDeck deck;
 
-        Set<PokerPlayer> players = Set.of(kenny, brenna, david, alice, sam);
-        PokerDealer dealer = new PokerDealer(CardDeckType.STANDARD, players);
-        PokerHandRuleSet handRuleSet = PokerHandRuleSet.LOWBALL;
-
-        dealer.shuffleDeck();
-        dealer.dealPlayers(2);
-
-        dealer.dealToBoard(3);
-        dealer.burnCard();
-        dealer.dealToBoard(1);
-        dealer.burnCard();
-        dealer.dealToBoard(1);
-
-        Set<PlayingCard> board = dealer.getBoardCards();
-
-        System.out.println();
-        System.out.println("Board: " + board);
-        System.out.println();
-        System.out.println("Kenny: " + kenny.getHandCards() + " (" + dealer.getPlayerPokerHand(kenny, handRuleSet) + ")");
-        System.out.println("Brenna: " + brenna.getHandCards() + " (" + dealer.getPlayerPokerHand(brenna, handRuleSet) + ")");
-        System.out.println("David: " + david.getHandCards() + " (" + dealer.getPlayerPokerHand(david, handRuleSet) + ")");
-        System.out.println("Alice: " + alice.getHandCards() + " (" + dealer.getPlayerPokerHand(alice, handRuleSet) + ")");
-        System.out.println("Sam: " + sam.getHandCards() + " (" + dealer.getPlayerPokerHand(sam, handRuleSet) + ")");
-        System.out.println();
-
-        for (PlayerHandInfo playerHandInfo : dealer.getWinningPlayers(handRuleSet)) {
-            PokerPlayer player = playerHandInfo.getPlayer();
-            PokerHand hand = playerHandInfo.getHand();
-            System.out.println("Best Player: " + player.getName());
-            System.out.println("Hand: " + hand + " " + hand.getCards());
-        }
+    public PokerGame(PokerGameFlow pokerGameFlow, PokerHandRuleSet handRuleSet, CardDeckType cardDeckType) {
+        this.pokerGameFlow = pokerGameFlow;
+        this.handRuleSet = handRuleSet;
+        this.deck = new CardDeck(cardDeckType);
     }
 }

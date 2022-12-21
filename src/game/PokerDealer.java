@@ -3,8 +3,8 @@ package game;
 import cards.CardDeck;
 import cards.CardDeckType;
 import cards.PlayingCard;
-import rules.handevaluation.PokerHand;
-import rules.PokerHandRuleSet;
+import rules.hand.handevaluation.PokerHand;
+import rules.hand.PokerHandRuleSet;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,4 +1,4 @@
-package rules.handranking.handtier;
+package rules.hand.handranking.handtier;
 
 import lombok.Getter;
 

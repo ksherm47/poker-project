@@ -1,8 +1,8 @@
-package rules.handevaluation;
+package rules.hand.handevaluation;
 
 import cards.CardRank;
 import cards.PlayingCard;
-import rules.handranking.handtier.PokerHandTier;
+import rules.hand.handranking.handtier.PokerHandTier;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

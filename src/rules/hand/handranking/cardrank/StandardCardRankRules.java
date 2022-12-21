@@ -1,4 +1,4 @@
-package rules.handranking.cardrank;
+package rules.hand.handranking.cardrank;
 
 import cards.CardRank;
 import com.google.common.collect.ImmutableMap;

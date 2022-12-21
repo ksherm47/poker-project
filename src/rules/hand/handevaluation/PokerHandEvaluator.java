@@ -1,4 +1,4 @@
-package rules.handevaluation;
+package rules.hand.handevaluation;
 
 import cards.PlayingCard;
 

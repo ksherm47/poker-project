@@ -1,15 +1,15 @@
-package rules.handranking;
+package rules.hand.handranking;
 
 import cards.CardRank;
-import rules.handevaluation.PokerHand;
+import rules.hand.handevaluation.PokerHand;
 import lombok.Getter;
-import rules.handranking.cardrank.CardRankRules;
-import rules.handranking.cardrank.LowballCardRankRules;
-import rules.handranking.cardrank.StandardCardRankRules;
-import rules.handranking.handtier.LowballHandTierRules;
-import rules.handranking.handtier.PokerHandTierRules;
-import rules.handranking.handtier.ShortDeckHandTierRules;
-import rules.handranking.handtier.StandardHandTierRules;
+import rules.hand.handranking.cardrank.CardRankRules;
+import rules.hand.handranking.cardrank.LowballCardRankRules;
+import rules.hand.handranking.cardrank.StandardCardRankRules;
+import rules.hand.handranking.handtier.LowballHandTierRules;
+import rules.hand.handranking.handtier.PokerHandTierRules;
+import rules.hand.handranking.handtier.ShortDeckHandTierRules;
+import rules.hand.handranking.handtier.StandardHandTierRules;
 
 import java.util.Comparator;
 

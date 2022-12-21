@@ -1,9 +1,9 @@
-package rules.handevaluation;
+package rules.hand.handevaluation;
 
 import cards.PlayingCard;
 import com.google.common.collect.Sets;
-import rules.handranking.PokerHandRankingRuleSet;
-import rules.handranking.handtier.PokerHandTier;
+import rules.hand.handranking.PokerHandRankingRuleSet;
+import rules.hand.handranking.handtier.PokerHandTier;
 import exceptions.PokerHandEvaluationException;
 
 import java.util.Collections;
